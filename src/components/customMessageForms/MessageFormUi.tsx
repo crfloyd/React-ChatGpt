@@ -9,15 +9,19 @@ import Dropzone, { FileWithPath } from "react-dropzone";
 interface Props {
 	setAttachment: React.Dispatch<React.SetStateAction<FileWithPath | null>>;
 	message: string;
+	appendText?: string;
 	handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	handleSubmit: () => void;
+	handleKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const MessageFormUi: React.FC<Props> = ({
 	setAttachment,
 	message,
+	appendText,
 	handleChange,
 	handleSubmit,
+	handleKeyDown,
 }) => {
 	const [preview, setPreview] = useState("");
 	return (
@@ -48,8 +52,17 @@ const MessageFormUi: React.FC<Props> = ({
 						type={"text"}
 						value={message}
 						onChange={handleChange}
+						onKeyDown={handleKeyDown}
 						placeholder={"Type a message..."}
 					/>
+					{appendText && (
+						<input
+							className="message-form-assist"
+							type="text"
+							disabled={true}
+							value={`${message}${appendText}`}
+						/>
+					)}
 				</div>
 				<div className="message-form-icons">
 					<Dropzone

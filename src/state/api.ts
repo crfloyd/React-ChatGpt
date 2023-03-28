@@ -12,7 +12,41 @@ export const api = createApi({
 				body: payload,
 			}),
 		}),
+		postAiCode: builder.mutation({
+			query: (payload) => ({
+				url: "openai/code",
+				method: "POST",
+				body: payload,
+			}),
+		}),
+		postAiAssist: builder.mutation({
+			query: (payload) => ({
+				url: "openai/assist",
+				method: "POST",
+				body: payload,
+			}),
+		}),
+		postLogin: builder.mutation({
+			query: (payload: { username: string; password: string }) => ({
+				url: "auth/login",
+				method: "POST",
+				body: payload,
+			}),
+		}),
+		postSignUp: builder.mutation({
+			query: (payload: { username: string; password: string }) => ({
+				url: "auth/signup",
+				method: "POST",
+				body: payload,
+			}),
+		}),
 	}),
 });
 
-export const { usePostAiTextMutation } = api;
+export const {
+	usePostAiTextMutation,
+	usePostAiCodeMutation,
+	usePostAiAssistMutation,
+	usePostLoginMutation,
+	usePostSignUpMutation,
+} = api;
