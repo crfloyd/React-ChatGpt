@@ -1,16 +1,19 @@
+import MessageFormUi from "@/components/customMessageForms/MessageFormUi";
+import { usePostAiTextMutation } from "@/state/api";
 import { useState } from "react";
 import { ChatObject, MessageFormProps } from "react-chat-engine-advanced";
 import { FileWithPath } from "react-dropzone";
-import MessageFormUi from "@/components/customMessageForms/MessageFormUi";
 
 interface Props {
 	props: MessageFormProps;
 	activeChat?: ChatObject;
 }
 
-const StandardMessageForm: React.FC<Props> = ({ props, activeChat }) => {
+const Ai: React.FC<Props> = ({ props, activeChat }) => {
 	const [message, setMessage] = useState("");
 	const [attachment, setAttachment] = useState<FileWithPath | null>(null);
+
+	const [trigger] = usePostAiTextMutation();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
 		setMessage(e.target.value);
@@ -32,18 +35,19 @@ const StandardMessageForm: React.FC<Props> = ({ props, activeChat }) => {
 					},
 			  ]
 			: [];
-		onSubmit({
+		const form = {
 			attachments: at,
 			created: date,
 			sender_username: props.username ?? "",
 			text: message,
 			id: activeChat?.id,
 			custom_json: "",
-		});
+		};
+		trigger(form);
+		onSubmit(form);
 		setMessage("");
 		setAttachment(null);
 	};
-
 	return (
 		<MessageFormUi
 			setAttachment={setAttachment}
@@ -53,4 +57,4 @@ const StandardMessageForm: React.FC<Props> = ({ props, activeChat }) => {
 		/>
 	);
 };
-export default StandardMessageForm;
+export default Ai;
